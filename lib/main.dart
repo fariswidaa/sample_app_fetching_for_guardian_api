@@ -38,20 +38,7 @@ class ResponseState extends State<Response> {
   @override
   void initState() {
     super.initState();
-  //  _getResponse();
   }
-
-  //_getResponse() async {
-    // String widgets ;
-    //var userList = await fetchAndParseUsers();
-    //print('fetching and have data in the initState $userList');
-    // userList.forEach((user) => widgets.add(ListTile(
-    //  title: Text(user.name),
-    //subtitle: Text(
-    // user.address.toString(),
-    // ))));
-   // setState(() => this.response = userList);
- // }
 
   @override
   Widget build(BuildContext context) {
@@ -117,14 +104,4 @@ Future<JsonResponse> fetchAndParseUsers() async {
     throw new Exception('can\'t connect to the Server :< ');
   }
 
-// create an empty list
-//  var userList = <User>[];
-
-// loop over the whole list
-// assign the values of the json items to the list
-//  parsedUserList.forEach((parsedUser) {
- //   userList.add(User.fromJsonMap(parsedUser));
- // });
-
-// return the list
 }
