@@ -1,15 +1,11 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-import 'package:sample_app_fetching/json/json_reponse.dart' ;
+import 'package:sample_app_fetching/src/app.dart' ;
 
 void main() {
-  runApp(SampleApp());
+  runApp(App());
 }
-
+/* 
 class SampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -105,3 +101,4 @@ Future<JsonResponse> fetchAndParseUsers() async {
   }
 
 }
+ */
