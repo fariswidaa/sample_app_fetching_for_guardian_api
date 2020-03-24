@@ -11,9 +11,9 @@
 //
 //     final jsonResponse = jsonResponseFromJson(jsonString);
 
-//JsonResponse jsonResponseFromJson(String str) => JsonResponse.fromJson(json.decode(str));
+// JsonResponse jsonResponseFromJson(String str) => JsonResponse.fromJson(json.decode(str));
 
-//String jsonResponseToJson(JsonResponse data) => json.encode(data.toJson());
+//  String jsonResponseToJson(JsonResponse data) => json.encode(data.toJson());
 
 class JsonResponse {
     Response response;
@@ -36,66 +36,24 @@ class JsonResponse {
 }
 
 class Response {
-    Tion edition;
-    Tion section;
+
     List<Result> results;
 
     Response({
-        this.edition,
-        this.section,
         this.results,
     });
 
-    factory Response.fromJson(Map<String, dynamic> json) => Response(
-        edition: Tion.fromJson(json["edition"]),
-        section: Tion.fromJson(json["section"]),
+    factory Response.fromJson(Map<String, dynamic> json) => Response( 
         results: List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-        "edition": edition.toJson(),
-        "section": section.toJson(),
         "results": List<dynamic>.from(results.map((x) => x.toJson())),
     };
 
     List<Result> get get_result =>results;
 }
 
-class Tion {
-    String id;
-    String webTitle;
-    String webUrl;
-    String apiUrl;
-    String code;
-    List<Tion> editions;
-
-    Tion({
-        this.id,
-        this.webTitle,
-        this.webUrl,
-        this.apiUrl,
-        this.code,
-        this.editions,
-    });
-
-    factory Tion.fromJson(Map<String, dynamic> json) => Tion(
-        id: json["id"],
-        webTitle: json["webTitle"],
-        webUrl: json["webUrl"],
-        apiUrl: json["apiUrl"],
-        code: json["code"] == null ? null : json["code"],
-        editions: json["editions"] == null ? null : List<Tion>.from(json["editions"].map((x) => Tion.fromJson(x))),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "id": id,
-        "webTitle": webTitle,
-        "webUrl": webUrl,
-        "apiUrl": apiUrl,
-        "code": code == null ? null : code,
-        "editions": editions == null ? null : List<dynamic>.from(editions.map((x) => x.toJson())),
-    };
-}
 
 class Result {
     DateTime webPublicationDate;
