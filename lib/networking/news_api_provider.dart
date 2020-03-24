@@ -3,7 +3,7 @@ import 'package:http/http.dart' show Client;
 import 'dart:convert';
 import 'package:sample_app_fetching/src/models/item_model.dart';
 
-class MovieApiProvider {
+class NewsApiProvider {
   Client client = Client();
   final _apiKey = 'ec0a178d-8280-418f-9042-392c14c03830';
 

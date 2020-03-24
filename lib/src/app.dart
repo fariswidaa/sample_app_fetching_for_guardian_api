@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/news_list.dart';
+import 'package:sample_app_fetching/src/ui/news_list.dart';
 
 class App extends StatelessWidget {
   @override
