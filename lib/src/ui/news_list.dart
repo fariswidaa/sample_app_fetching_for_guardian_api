@@ -2,10 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:sample_app_fetching/src/models/item_model.dart';
 import 'package:sample_app_fetching/src/blocs/news_bloc.dart';
 
-class NewsList extends StatelessWidget {
+class NewsList extends StatefulWidget {
+  @override
+  _NewsListState createState() => _NewsListState();
+}
+
+class _NewsListState extends State<NewsList> {
+  @override
+  void initState() {
+    super.initState();
+    bloc.fetchAllNews();
+  }
+
+  @override
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bloc.fetchAllNews();
     return Scaffold(
       appBar: AppBar(
         title: Text('The Guardian'),
@@ -26,13 +42,15 @@ class NewsList extends StatelessWidget {
 
   Widget buildList(AsyncSnapshot<JsonResponse> snapshot) {
     return ListView.builder(
-           itemBuilder: (BuildContext context, int position) {
-              return ListTile(
-                title:Text(snapshot.data.response.results[position].webTitle.toString()),
-                subtitle:Text(snapshot.data.response.results[position].webUrl.toString()),
-              );
-            },
-            itemCount: snapshot.data.response.results.length,
-          );
+      itemBuilder: (BuildContext context, int position) {
+        return ListTile(
+          title: Text(
+              snapshot.data.response.results[position].webTitle.toString()),
+          subtitle:
+              Text(snapshot.data.response.results[position].webUrl.toString()),
+        );
+      },
+      itemCount: snapshot.data.response.results.length,
+    );
   }
 }

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:sample_app_fetching/src/models/item_model.dart';
 
 class NewsApiProvider {
- // Client client = Client();
+ 
   final _apiKey = 'ec0a178d-8280-418f-9042-392c14c03830';
 
   Future<JsonResponse> fetchMovieList() async {
@@ -21,17 +21,3 @@ class NewsApiProvider {
     }
   }
 }
-//Future<JsonResponse> fetchAndParseUsers() async {
- // fetching the API
- //http.Response response = await http.get(jsonEndpoint);
-
- //if (response.statusCode == 200) {
- //print ('successful !');
-   // return JsonResponse.fromJson(json.decode(response.body));
-  //} else {
-    // else throw an Exception
-    //print ('can\'t connect to the server');
-    //throw new Exception('can\'t connect to the Server :< ');
-  //}
-
-//}
