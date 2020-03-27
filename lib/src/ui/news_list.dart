@@ -4,7 +4,7 @@ import 'package:share/share.dart';
 
 import 'package:sample_app_fetching/src/models/item_model.dart';
 import 'package:sample_app_fetching/src/blocs/news_bloc.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsList extends StatefulWidget {
   @override
@@ -28,7 +28,7 @@ class _NewsListState extends State<NewsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[700],
+        backgroundColor: Colors.deepPurple[600],
         title: Text('The Guardian'),
       ),
       body: StreamBuilder(
@@ -49,8 +49,7 @@ class _NewsListState extends State<NewsList> {
     return ListView.builder(
       itemBuilder: (BuildContext context, int position) {
         return Padding(
-          padding:
-              EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0 ),
+          padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
           child: Container(
             width: 344.0,
             height: 148.0,
@@ -59,7 +58,7 @@ class _NewsListState extends State<NewsList> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               // color: Colors.blue[700],
-              elevation:4.0,
+              elevation: 4.0,
               child: InkWell(
                 splashColor: Colors.pink.withAlpha(30),
                 onTap: () {
@@ -73,7 +72,7 @@ class _NewsListState extends State<NewsList> {
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image(
                           width: 80.0,
-                          height:80.0,
+                          height: 80.0,
                           fit: BoxFit.contain,
                           image: NetworkImage(snapshot.data.response
                               .results[position].fields.thumbnail),
@@ -81,9 +80,8 @@ class _NewsListState extends State<NewsList> {
                       ),
                       title: Text(
                         snapshot.data.response.results[position].webTitle
-                            .toString()+'...',
-                            overflow: TextOverflow.ellipsis,
-                        
+                            .toString(),
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -96,12 +94,14 @@ class _NewsListState extends State<NewsList> {
                           children: <Widget>[
                             FlatButton(
                               child: const Text('Full Article'),
-                              onPressed: () {},
+                              onPressed: () {
+                                urlLaunch(context, snapshot, position);
+                              },
                             ),
                             FlatButton(
                               child: const Text('Share'),
                               onPressed: () {
-                                share(context, snapshot,position);
+                                share(context, snapshot, position);
                               },
                             ),
                           ],
@@ -118,13 +118,26 @@ class _NewsListState extends State<NewsList> {
       itemCount: snapshot.data.response.results.length,
     );
   }
-  share(BuildContext context, AsyncSnapshot<JsonResponse> jsonResponse , int position) {
-  final RenderBox box = context.findRenderObject();
 
-  Share.share("${jsonResponse.data.response.results[position].webTitle} - ${jsonResponse.data.response.results[position].webUrl}",
-      subject: jsonResponse.data.response.results[position].webUrl,
-      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
-}
+  share(BuildContext context, AsyncSnapshot<JsonResponse> jsonResponse,
+      int position) {
+    final RenderBox box = context.findRenderObject();
+
+    Share.share(
+        "${jsonResponse.data.response.results[position].webTitle} - ${jsonResponse.data.response.results[position].webUrl}",
+        subject: jsonResponse.data.response.results[position].webUrl,
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+  }
+
+  urlLaunch(BuildContext context, AsyncSnapshot<JsonResponse> snapshot,
+      int position) async {
+    final fullArticle = snapshot.data.response.results[position].webUrl;
+    if (await canLaunch(fullArticle)) {
+      await launch(fullArticle, forceSafariVC: false);
+    } else {
+      throw 'Could not launch $fullArticle';
+    }
+  }
 }
 
 /*   @override
