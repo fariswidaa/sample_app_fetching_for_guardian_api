@@ -30,6 +30,7 @@ class _NewsListState extends State<NewsList> {
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[600],
         title: Text('The Guardian'),
+
       ),
       body: StreamBuilder(
         stream: bloc.allNews,
@@ -58,9 +59,9 @@ class _NewsListState extends State<NewsList> {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               // color: Colors.blue[700],
-              elevation: 4.0,
+              elevation: 3.0,
               child: InkWell(
-                splashColor: Colors.pink.withAlpha(30),
+                splashColor: Colors.blue.withAlpha(30),
                 onTap: () {
                   print('Card tapped.');
                 },
@@ -82,6 +83,7 @@ class _NewsListState extends State<NewsList> {
                         snapshot.data.response.results[position].webTitle
                             .toString(),
                         overflow: TextOverflow.ellipsis,
+                        maxLines : 3,
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -101,7 +103,7 @@ class _NewsListState extends State<NewsList> {
                             FlatButton(
                               child: const Text('Share'),
                               onPressed: () {
-                                share(context, snapshot, position);
+                                return share(context, snapshot, position);
                               },
                             ),
                           ],
@@ -121,13 +123,15 @@ class _NewsListState extends State<NewsList> {
 
   share(BuildContext context, AsyncSnapshot<JsonResponse> jsonResponse,
       int position) {
-    final RenderBox box = context.findRenderObject();
+  //  final RenderBox box = context.findRenderObject();
 
     Share.share(
-        "${jsonResponse.data.response.results[position].webTitle} - ${jsonResponse.data.response.results[position].webUrl}",
+        "${jsonResponse.data.response.results[position].webTitle} " ,
         subject: jsonResponse.data.response.results[position].webUrl,
-        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+      //  sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+      );
   }
+
 
   urlLaunch(BuildContext context, AsyncSnapshot<JsonResponse> snapshot,
       int position) async {
@@ -138,6 +142,7 @@ class _NewsListState extends State<NewsList> {
       throw 'Could not launch $fullArticle';
     }
   }
+
 }
 
 /*   @override
