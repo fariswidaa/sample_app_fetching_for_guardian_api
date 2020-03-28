@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:share/share.dart';
 
@@ -24,24 +25,56 @@ class _NewsListState extends State<NewsList> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurple[600],
-        title: Text('The Guardian'),
-
-      ),
+      appBar:appBarWidget(),
       body: StreamBuilder(
         stream: bloc.allNews,
         builder: (context, AsyncSnapshot<JsonResponse> snapshot) {
           if (snapshot.hasData) {
             return buildList(snapshot);
           } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
+            return errorWidget();
           }
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            strokeWidth: 2,
+            backgroundColor: Colors.amber,
+          ));
         },
+      ),
+    );
+  }
+
+  Widget errorWidget() {
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.0),
+          color: Colors.blue[900],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 180.0,
+              color: Colors.white,
+            ),
+            Text(
+              "Oh no! We can't connect right now!",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    color: Colors.white,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -83,9 +116,9 @@ class _NewsListState extends State<NewsList> {
                         snapshot.data.response.results[position].webTitle
                             .toString(),
                         overflow: TextOverflow.ellipsis,
-                        maxLines : 3,
-                        style: TextStyle(
-                          fontSize: 18.0,
+                        maxLines: 3,
+                        style: GoogleFonts.raleway(
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -123,15 +156,14 @@ class _NewsListState extends State<NewsList> {
 
   share(BuildContext context, AsyncSnapshot<JsonResponse> jsonResponse,
       int position) {
-  //  final RenderBox box = context.findRenderObject();
+    //  final RenderBox box = context.findRenderObject();
 
     Share.share(
-        "${jsonResponse.data.response.results[position].webTitle} " ,
-        subject: jsonResponse.data.response.results[position].webUrl,
+      "${jsonResponse.data.response.results[position].webTitle} ",
+      subject: jsonResponse.data.response.results[position].webUrl,
       //  sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
-      );
+    );
   }
-
 
   urlLaunch(BuildContext context, AsyncSnapshot<JsonResponse> snapshot,
       int position) async {
@@ -142,78 +174,12 @@ class _NewsListState extends State<NewsList> {
       throw 'Could not launch $fullArticle';
     }
   }
-
 }
 
-/*   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.pink[700],
-        title: Text('Card Layout'),
-      ),
-      body: Padding (
-        padding :EdgeInsets.only(top : 16.0 , left:8.0 , right:8.0 , bottom : 8.0),
-        child :Container(
-        width: 344.0,
-        height: 198.0,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-         // color: Colors.blue[700],
-          elevation: 5.0,
-          child: InkWell(
-            splashColor: Colors.pink.withAlpha(30),
-            onTap: () {
-              print('Card tapped.');
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                 ListTile(
-                  leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                      child :Image(
-                    width: 70.0,
-                    fit: BoxFit.cover,
-                    image: NetworkImage('https://picsum.photos/200?image=10'),
-                  ),
-                  ),
-                  title: Text(
-                    snapshot.data.response.results[position].webTitle.toString(),
-                    maxLines:3,
-                    style: GoogleFonts.oswald(
-                        textStyle:Theme.of(context).textTheme.display1,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-                Expanded(
-                  child: ButtonTheme.bar(
-                    child: ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: const Text('Full Article'
-                              ),
-                          onPressed: () {},
-                        ),
-                        FlatButton(
-                          child: const Text('Delete'
-                             ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      ),
-    );
+
+AppBar appBarWidget(){
+     return AppBar(
+        backgroundColor: Colors.blue[700],
+        title: Text('The Guardian'),
+      );
   }
-} */
