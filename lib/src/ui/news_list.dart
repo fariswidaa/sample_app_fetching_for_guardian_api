@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import 'package:share/share.dart';
+import 'package:provider/provider.dart';
+import 'package:sample_app_fetching/src/models/connectivity_status.dart';
 
 import 'package:sample_app_fetching/src/models/item_model.dart';
 import 'package:sample_app_fetching/src/blocs/news_bloc.dart';
+
+import 'package:google_fonts/google_fonts.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsList extends StatefulWidget {
@@ -21,22 +23,25 @@ class _NewsListState extends State<NewsList> {
 
   @override
   void dispose() {
+  super.dispose();
     bloc.dispose();
-    super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
+
+    final connectionStatus = Provider.of<ConnectivityStatus>(context);
+
     return Scaffold(
-      appBar:appBarWidget(),
+      appBar: appBarWidget(),
       body: StreamBuilder(
         stream: bloc.allNews,
         builder: (context, AsyncSnapshot<JsonResponse> snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && (connectionStatus == ConnectivityStatus.WiFi || 
+          connectionStatus == ConnectivityStatus.Cellular)) {
             return buildList(snapshot);
-          } else if (snapshot.hasError) {
-            return errorWidget();
+          } else if (snapshot.hasError || connectionStatus == ConnectivityStatus.Offline){
+            return Center(child:errorWidget());
           }
           return Center(
               child: CircularProgressIndicator(
@@ -124,24 +129,24 @@ class _NewsListState extends State<NewsList> {
                       ),
                     ),
                     Expanded(
-                      child: ButtonTheme.bar(
-                        child: ButtonBar(
-                          children: <Widget>[
-                            FlatButton(
-                              child: const Text('Full Article'),
-                              onPressed: () {
-                                urlLaunch(context, snapshot, position);
-                              },
-                            ),
-                            FlatButton(
-                              child: const Text('Share'),
-                              onPressed: () {
-                                return share(context, snapshot, position);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
+                      child:ButtonTheme.bar(
+      child: ButtonBar(
+        children: <Widget>[
+          FlatButton(
+            child: const Text('Full Article'),
+            onPressed: () {
+              urlLaunch(context, snapshot, position);
+            },
+          ),
+          FlatButton(
+            child: const Text('Share'),
+            onPressed: () {
+              return share(context, snapshot, position);
+            },
+          ),
+        ],
+      ),
+    ),
                     ),
                   ],
                 ),
@@ -154,14 +159,15 @@ class _NewsListState extends State<NewsList> {
     );
   }
 
+  buttonTheme(AsyncSnapshot<JsonResponse> snapshot, int position) {
+    
+  }
+
   share(BuildContext context, AsyncSnapshot<JsonResponse> jsonResponse,
       int position) {
-    //  final RenderBox box = context.findRenderObject();
-
     Share.share(
-      "${jsonResponse.data.response.results[position].webTitle} ",
-      subject: jsonResponse.data.response.results[position].webUrl,
-      //  sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size
+      "${jsonResponse.data.response.results[position].webTitle} \n ${jsonResponse.data.response.results[position].webTitle} ",
+      subject: jsonResponse.data.response.results[position].webTitle,
     );
   }
 
@@ -176,10 +182,15 @@ class _NewsListState extends State<NewsList> {
   }
 }
 
-
-AppBar appBarWidget(){
-     return AppBar(
-        backgroundColor: Colors.blue[700],
-        title: Text('The Guardian'),
-      );
-  }
+AppBar appBarWidget() {
+  return AppBar(
+    backgroundColor: Colors.blue[700],
+    title: Text(
+      'The Guardian',
+      style: GoogleFonts.raleway(
+        fontSize: 18.0,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
+}

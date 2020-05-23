@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+
+import 'package:sample_app_fetching/networking/connectivity_service.dart';
+import 'package:sample_app_fetching/src/models/connectivity_status.dart';
 import 'package:sample_app_fetching/src/ui/news_list.dart';
+
+import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return StreamProvider<ConnectivityStatus>(
+builder: (context) => ConnectivityService().connectionStatusController,
+child: MaterialApp(
           theme: ThemeData(
         // This is the theme of your application.
         //
@@ -21,6 +28,9 @@ class App extends StatelessWidget {
       home: Scaffold(
         body: NewsList(),
       ),
-    );
+    ),
+);
   }
 }
+
+
