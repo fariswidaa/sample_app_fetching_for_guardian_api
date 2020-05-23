@@ -5,7 +5,7 @@ import 'package:sample_app_fetching/src/models/item_model.dart';
 
 class NewsApiProvider {
  
-  final _apiKey = 'ec0a178d-8280-418f-9042-392c14c03830';
+  final _apiKey = 'api_key';
 
   Future<JsonResponse> fetchMovieList() async {
     print("entered");
