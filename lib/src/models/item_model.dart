@@ -7,14 +7,6 @@
  * Bottom level and go higher levels 
  */
 
-// To parse this JSON data, do
-//
-//     final jsonResponse = jsonResponseFromJson(jsonString);
-
-// JsonResponse jsonResponseFromJson(String str) => JsonResponse.fromJson(json.decode(str));
-
-//  String jsonResponseToJson(JsonResponse data) => json.encode(data.toJson());
-
 class JsonResponse {
     Response response;
 
